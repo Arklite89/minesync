@@ -14,6 +14,10 @@ find_package(FLTK REQUIRED)
 add_executable(minesync
     src/main.cpp
     src/ui/MainWindow.cpp
+        src/ui/ConnectionWindow.h
+        src/ui/ConnectionWindow.cpp
+        src/client/Client.h
+        src/client/Client.cpp
 )
 
 target_include_directories(minesync PRIVATE 
