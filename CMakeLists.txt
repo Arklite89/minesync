@@ -4,6 +4,14 @@ project(minesync CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+FetchContent_Declare(
+        cpr
+        GIT_REPOSITORY https://github.com/libcpr/cpr.git
+        GIT_TAG        1.10.5
+)
+FetchContent_MakeAvailable(cpr)
+
 # Find Cairo via PkgConfig
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CAIRO REQUIRED cairo)
@@ -12,16 +20,18 @@ pkg_check_modules(CAIRO REQUIRED cairo)
 find_package(FLTK REQUIRED)
 
 add_executable(minesync
-    src/main.cpp
-    src/ui/MainWindow.cpp
-        src/ui/ConnectionWindow.h
-        src/ui/ConnectionWindow.cpp
-        src/client/Client.h
-        src/client/Client.cpp
+        client/src/main.cpp
+        client/src/ui/MainWindow.cpp
+        client/src/ui/ConnectionWindow.h
+        client/src/ui/ConnectionWindow.cpp
+        client/src/client/Client.h
+        client/src/client/Client.cpp
+        client/src/api/ApiController.h
+        client/src/api/ApiController.cpp
 )
 
-target_include_directories(minesync PRIVATE 
-    src 
+target_include_directories(minesync PRIVATE
+        client/src
     ${FLTK_INCLUDE_DIRS}
     ${CAIRO_INCLUDE_DIRS}
 )
@@ -29,4 +39,5 @@ target_include_directories(minesync PRIVATE
 target_link_libraries(minesync PRIVATE 
     ${FLTK_LIBRARIES}
     ${CAIRO_LIBRARIES}
+    cpr::cpr
 )
