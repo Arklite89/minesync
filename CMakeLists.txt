@@ -19,6 +19,8 @@ pkg_check_modules(CAIRO REQUIRED cairo)
 # Find FLTK
 find_package(FLTK REQUIRED)
 
+find_package(libzip CONFIG REQUIRED)
+
 add_executable(minesync
         client/src/main.cpp
         client/src/ui/MainWindow.cpp
@@ -32,12 +34,13 @@ add_executable(minesync
 
 target_include_directories(minesync PRIVATE
         client/src
-    ${FLTK_INCLUDE_DIRS}
-    ${CAIRO_INCLUDE_DIRS}
+        ${FLTK_INCLUDE_DIRS}
+        ${CAIRO_INCLUDE_DIRS}
 )
 
-target_link_libraries(minesync PRIVATE 
-    ${FLTK_LIBRARIES}
-    ${CAIRO_LIBRARIES}
-    cpr::cpr
+target_link_libraries(minesync PRIVATE
+        ${FLTK_LIBRARIES}
+        ${CAIRO_LIBRARIES}
+        cpr::cpr
+        libzip::zip
 )
