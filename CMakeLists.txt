@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(minesync CXX)
+project(minesync C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,8 +19,6 @@ pkg_check_modules(CAIRO REQUIRED cairo)
 # Find FLTK
 find_package(FLTK REQUIRED)
 
-find_package(libzip CONFIG REQUIRED)
-
 add_executable(minesync
         client/src/main.cpp
         client/src/ui/MainWindow.cpp
@@ -30,6 +28,8 @@ add_executable(minesync
         client/src/client/Client.cpp
         client/src/api/ApiController.h
         client/src/api/ApiController.cpp
+        common/zip/zip.c
+        common/zip/zip.h
 )
 
 target_include_directories(minesync PRIVATE
@@ -42,5 +42,4 @@ target_link_libraries(minesync PRIVATE
         ${FLTK_LIBRARIES}
         ${CAIRO_LIBRARIES}
         cpr::cpr
-        libzip::zip
 )
