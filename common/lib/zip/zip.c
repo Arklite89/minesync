@@ -8,6 +8,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 #define __STDC_WANT_LIB_EXT1__ 1
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <errno.h>
 #include <sys/stat.h>
@@ -414,7 +421,7 @@ static int zip_mkpath(char *path, size_t pos) {
         *p = '/';
       }
 
-      if (lstat(npath, &st) < 0) {
+      if (lstat64(npath, &st) < 0) {
         if (MZ_MKDIR(npath) == -1) {
           if (errno != EEXIST) {
             return ZIP_EMKDIR;
@@ -751,7 +758,7 @@ static int zip_archive_extract(mz_zip_archive *zip_archive, const char *dir,
       // here.
       {
         struct MZ_FILE_STAT_STRUCT path_st;
-        if (lstat(path, &path_st) == 0 && S_ISLNK(path_st.st_mode)) {
+        if (lstat64(path, &path_st) == 0 && S_ISLNK(path_st.st_mode)) {
           if (unlink(path) != 0) {
             err = ZIP_ESYMLINK;
             goto out;

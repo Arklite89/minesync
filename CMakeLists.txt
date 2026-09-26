@@ -28,12 +28,22 @@ add_executable(minesync
         client/src/client/Client.cpp
         client/src/api/ApiController.h
         client/src/api/ApiController.cpp
-        common/zip/zip.c
-        common/zip/zip.h
+        common/lib/zip/zip.c
+        common/lib/zip/zip.h
+        common/zip/ZipUtils.cpp
+        common/zip/ZipUtils.h
 )
+
+target_compile_definitions(minesync PRIVATE
+        _GNU_SOURCE
+        _LARGEFILE64_SOURCE
+        _FILE_OFFSET_BITS=64
+)
+
 
 target_include_directories(minesync PRIVATE
         client/src
+        common/lib/zip
         ${FLTK_INCLUDE_DIRS}
         ${CAIRO_INCLUDE_DIRS}
 )
