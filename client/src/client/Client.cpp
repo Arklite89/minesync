@@ -5,15 +5,32 @@
 #include "api/ApiController.h"
 #include "files/CacheHandler.h"
 
-Client::Client(const std::string &newServerUrl) {
-    Client::setServerUrl(newServerUrl);
+Client::Client(std::string serverUrl) : serverURL(std::move(serverUrl)) {}
+
+std::unique_ptr<Client> Client::create(const std::string& newServerUrl) {
+    if (!ApiController::isServerReachable(newServerUrl)) {
+        std::cerr << "Failed to reach server: " << newServerUrl << std::endl;
+        return nullptr;
+    }
+
+    return std::unique_ptr<Client>(new Client(newServerUrl));
 }
 
 std::string Client::getServerUrl() { return serverURL; }
 
+bool Client::canConnect() const {
+    return ApiController::isServerReachable(Client::serverURL);
+}
+
 bool Client::setServerUrl(const std::string &newServerUrl) {
-    serverURL = newServerUrl;
-    return true; // TODO add url validation
+    const bool urlReachable = ApiController::isServerReachable(newServerUrl);
+
+    if (urlReachable) {
+        serverURL = newServerUrl;
+        return true;
+    }
+
+    return false;
 }
 
 bool Client::sendSaveToServer(const fs::path& savePath) {
