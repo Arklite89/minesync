@@ -4,30 +4,42 @@
 
 namespace fs = std::filesystem;
 
-bool ZipUtils::extractZip(const std::string& zipPath, const std::string& outputDir) {
+bool ZipUtils::extractZip(const fs::path& zipPath, const fs::path& outputDir) {
     int result = zip_extract(zipPath.c_str(), outputDir.c_str(), nullptr, nullptr);
     return result == 0;
 }
 
-bool ZipUtils::zipDirectory(const std::string& sourceDir, const std::string& outputZip) {
-    fs::path baseDir(sourceDir);
-
-    if (!fs::exists(baseDir) || !fs::is_directory(baseDir)) { return false; }
+bool ZipUtils::zipDirectory(const fs::path& sourceDir, const fs::path& outputZip) {
+    if (!fs::exists(sourceDir) || !fs::is_directory(sourceDir)) { return false; }
 
     struct zip_t* zip = zip_open(outputZip.c_str(), ZIP_DEFAULT_COMPRESSION_LEVEL, 'w');
     if (!zip) { return false; }
 
-    for (const auto& entry : fs::recursive_directory_iterator(baseDir)) {
-        fs::path relativePath = fs::relative(entry.path(), baseDir);
+    for (const auto& entry : fs::recursive_directory_iterator(sourceDir)) {
+        fs::path relativePath = fs::relative(entry.path(), sourceDir);
         std::string zipEntryName = relativePath.generic_string();
 
         if (entry.is_directory()) {
             zipEntryName += '/';
-            zip_entry_open(zip, zipEntryName.c_str());
+
+            if (zip_entry_open(zip, zipEntryName.c_str()) != 0) {
+                zip_close(zip);
+                return false;
+            }
+
             zip_entry_close(zip);
         } else if (entry.is_regular_file()) {
-            zip_entry_open(zip, zipEntryName.c_str());
-            zip_entry_fwrite(zip, entry.path().string().c_str());
+            if (zip_entry_open(zip, zipEntryName.c_str()) != 0) {
+                zip_close(zip);
+                return false;
+            }
+
+            if (zip_entry_fwrite(zip, entry.path().string().c_str()) != 0) {
+                zip_entry_close(zip);
+                zip_close(zip);
+                return false;
+            }
+
             zip_entry_close(zip);
         }
     }

@@ -1,8 +1,10 @@
 #pragma once
-#include <string>
-#include "zip.h"
+
+#include "cpr/filesystem.h"
+
+namespace fs = std::filesystem;
 
 namespace ZipUtils {
-    bool extractZip(const std::string& zipPath, const std::string& outputDir);
-    bool zipDirectory(const std::string& sourceDir, const std::string& outputZip);
+    bool extractZip(const fs::path& zipPath, const fs::path& outputDir);
+    bool zipDirectory(const fs::path& sourceDir, const fs::path& outputZip);
 };
