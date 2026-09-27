@@ -5,7 +5,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Flex.H>
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(Client* client) {
   window = new Fl_Window(
     UIConfig::WindowWidth,
     UIConfig::WindowHeight,
