@@ -4,10 +4,13 @@
 
 class Client {
 private:
-    std::string server_url;
+    std::string serverURL;
 
 public:
     explicit Client(const std::string &new_server_url);
-    std::string get_server_url();
-    bool set_server_url(const std::string &new_server_url);
+
+    std::string getServerUrl();
+    bool setServerUrl(const std::string &new_server_url);
+
+    bool syncLocalSave();
 };

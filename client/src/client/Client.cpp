@@ -1,12 +1,12 @@
 #include "Client.h"
 
 Client::Client(const std::string &new_server_url) {
-    Client::set_server_url(new_server_url);
+    Client::setServerUrl(new_server_url);
 }
 
-std::string Client::get_server_url() { return server_url; }
+std::string Client::getServerUrl() { return serverURL; }
 
-bool Client::set_server_url(const std::string &new_server_url) {
-    server_url = new_server_url;
+bool Client::setServerUrl(const std::string &new_server_url) {
+    serverURL = new_server_url;
     return true; // TODO add url validation
 }

@@ -7,7 +7,7 @@ ApiController::ApiController(Client *client) {
 
 cpr::Response ApiController::upload_save(cpr::File file) const {
     return cpr::Post(
-        cpr::Url{client->get_server_url()},
+        cpr::Url{client->getServerUrl()},
         cpr::Multipart{
         {"file", file}
     });
