@@ -4,4 +4,5 @@
 
 namespace  ApiController {
     [[nodiscard]] cpr::Response uploadSave(Client* client, cpr::File file);
+    bool isServerReachable(const std::string& host);
 };
