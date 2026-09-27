@@ -2,15 +2,19 @@
 
 #import <string>
 
+#include "cpr/filesystem.h"
+
+namespace fs = std::filesystem;
+
 class Client {
 private:
     std::string serverURL;
 
 public:
-    explicit Client(const std::string &new_server_url);
+    explicit Client(const std::string& newServerUrl);
 
     std::string getServerUrl();
-    bool setServerUrl(const std::string &new_server_url);
+    bool setServerUrl(const std::string& newServerUrl);
 
-    bool syncLocalSave();
+    bool sendSaveToServer(const fs::path& savePath);
 };
