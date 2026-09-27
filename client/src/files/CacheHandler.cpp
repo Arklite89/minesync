@@ -81,3 +81,9 @@ bool CacheHandler::cacheSaveToZip(const fs::path& save_path) {
 
     return ZipUtils::zipDirectory(save_path, output_path);
 }
+
+fs::path CacheHandler::getLatestCachedSaveZip() {
+    fs::path returnPath = getAppCacheDir() / (std::string(ClientAppConfig::SAVE_CACHE_DIRNAME) + ".zip");
+    if (fs::exists(returnPath)) { return returnPath; }
+    return {};
+}

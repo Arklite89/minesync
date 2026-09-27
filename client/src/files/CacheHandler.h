@@ -25,5 +25,6 @@ public:
     }
 
     static fs::path getAppCacheDir();
+    static fs::path getLatestCachedSaveZip();
     static bool cacheSaveToZip(const fs::path& save_path);
 };
