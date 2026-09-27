@@ -20,7 +20,7 @@ pkg_check_modules(CAIRO REQUIRED cairo)
 find_package(FLTK REQUIRED)
 
 add_executable(minesync
-        client/src/main.cpp
+        main.cpp
         client/src/ui/MainWindow.cpp
         client/src/ui/ConnectionWindow.h
         client/src/ui/ConnectionWindow.cpp
@@ -32,6 +32,9 @@ add_executable(minesync
         common/lib/zip/zip.h
         common/zip/ZipUtils.cpp
         common/zip/ZipUtils.h
+        client/src/files/CacheHandler.cpp
+        client/src/files/CacheHandler.h
+        client/config/ClientAppConfig.h
 )
 
 target_compile_definitions(minesync PRIVATE
@@ -43,6 +46,7 @@ target_compile_definitions(minesync PRIVATE
 
 target_include_directories(minesync PRIVATE
         client/src
+        client/config
         common/lib/zip
         ${FLTK_INCLUDE_DIRS}
         ${CAIRO_INCLUDE_DIRS}
