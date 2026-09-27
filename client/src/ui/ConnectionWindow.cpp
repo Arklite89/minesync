@@ -36,6 +36,9 @@ void ConnectionWindow::connectButtonPressed(Fl_Widget* widget, void* data) {
 
     std::string connectionString = self->URL_PREFIX + self->connectionInput->value();
 
+    self->connectButton->label(("Connecting to " + connectionString + "  ...").c_str());
+    self->connectButton->labelcolor(FL_YELLOW);
+
     auto client = Client::create(self->connectionInput->value());
 
     if (!client) {
