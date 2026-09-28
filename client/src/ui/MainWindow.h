@@ -2,6 +2,9 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <string>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Choice.H>
+#include <FL/Fl_Input.H>
 
 #include "client/Client.h"
 
@@ -14,11 +17,22 @@ inline constexpr const char *WindowTitle = "Minesync";
 class MainWindow {
 private:
   Fl_Window *window;
+  Fl_Choice *worldSelectChoice;
+  Fl_Input *savesPathInput;
+  Fl_Button *savesPathBrowseButton;
+  Fl_Button *scoutDirectoryButton;
+  Fl_Button *syncButton;
+  Fl_Button *uploadButton;
+
   Client* client;
+
+  static void savesPathBrowseButtonPressed(Fl_Widget* widget, void* data);
+
 
 public:
   explicit MainWindow(Client* client);
+  ~MainWindow();
   MainWindow() = delete;
 
-  void show();
+  void show() const;
 };

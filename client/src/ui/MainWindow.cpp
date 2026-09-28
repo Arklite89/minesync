@@ -8,7 +8,9 @@
 #include <FL/Fl_Flex.H>
 #include <FL/Fl_Input.H>
 
-MainWindow::MainWindow(Client* client) {
+#include "../../../common/lib/pfd/portable-file-dialogs.h"
+
+MainWindow::MainWindow(Client* client) : client(client) {
   window = new Fl_Window(
     UIConfig::WindowWidth,
     UIConfig::WindowHeight,
@@ -20,20 +22,35 @@ MainWindow::MainWindow(Client* client) {
   constexpr int WINDOW_QUARTER = UIConfig::WindowWidth / 4;
 
   auto worldSelectLabel = new Fl_Box(10, 50, WINDOW_QUARTER - 10, 20, "Select a world:");
-  auto worldSelectChoice = new Fl_Choice(WINDOW_QUARTER + 10, 50, WINDOW_QUARTER * 3 - 20, 20);
+  worldSelectChoice = new Fl_Choice(WINDOW_QUARTER + 10, 50, WINDOW_QUARTER * 3 - 20, 20);
 
   auto savesPathLabel = new Fl_Box(10, 80, WINDOW_QUARTER - 10, 20, "Path to saves: ");
-  auto savesPathInput = new Fl_Input(WINDOW_QUARTER + 10, 80, (WINDOW_QUARTER - 10) *2, 20);
-  auto savesPathBrowse = new Fl_Button(WINDOW_QUARTER * 3, 80, WINDOW_QUARTER - 10, 20, "Browse...");
+  savesPathInput = new Fl_Input(WINDOW_QUARTER + 10, 80, (WINDOW_QUARTER - 10) *2, 20);
+  savesPathBrowseButton = new Fl_Button(WINDOW_QUARTER * 3, 80, WINDOW_QUARTER - 10, 20, "Browse...");
+  savesPathBrowseButton->callback(savesPathBrowseButtonPressed, this);
 
-  auto syncButton = new Fl_Button(10, UIConfig::WindowHeight - 160, UIConfig::WindowWidth - 20, 70, "Sync!");
-  auto uploadButton = new Fl_Button(10, UIConfig::WindowHeight - 80, UIConfig::WindowWidth - 20, 70, "Upload!");
+
+  syncButton = new Fl_Button(10, UIConfig::WindowHeight - 160, UIConfig::WindowWidth - 20, 70, "Sync!");
+  uploadButton = new Fl_Button(10, UIConfig::WindowHeight - 80, UIConfig::WindowWidth - 20, 70, "Upload!");
 
   window->end();
 };
 
-void MainWindow::show() {
+MainWindow::~MainWindow() {
+  delete window;
+}
+
+void MainWindow::show() const {
   if (window) {
     window->show();
+  }
+}
+
+void MainWindow::savesPathBrowseButtonPressed(Fl_Widget *widget, void *data) {
+  auto* self = static_cast<MainWindow*>(data);
+  auto selection = pfd::open_file("Select your save file", ".", { "All Files(*)", "*"} ).result();
+
+  if (!selection.empty()) {
+    self->savesPathInput->label(selection[0].c_str());
   }
 }
