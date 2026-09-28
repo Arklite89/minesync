@@ -35,6 +35,7 @@ add_executable(minesync
         client/src/files/CacheHandler.cpp
         client/src/files/CacheHandler.h
         client/config/ClientAppConfig.h
+        common/lib/pfd/portable-file-dialogs.h
 )
 
 target_compile_definitions(minesync PRIVATE
