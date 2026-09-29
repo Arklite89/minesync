@@ -7,7 +7,7 @@
 
 
 int main(int argc, char **argv) {
-  auto client = Client::create("localhost");
+  auto client = Client::create("http://localhost:18080");
 
   if (!client) { return 1; }
 
