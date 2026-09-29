@@ -12,7 +12,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cpr)
 
-# GUI Dependencies (Client only)
+FetchContent_Declare(
+        crow
+        GIT_REPOSITORY https://github.com/CrowCpp/Crow.git
+        GIT_TAG        master
+)
+FetchContent_MakeAvailable(crow)
+
+# GUI Dependencies
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CAIRO REQUIRED cairo)
 find_package(FLTK REQUIRED)
@@ -59,6 +66,8 @@ add_executable(minesync_client
         client/src/data/World.cpp
         client/src/data/World.h
         common/files/ClientAppConfig.h
+        server/src/api/ApiController.cpp
+        server/src/api/ApiController.h
 )
 
 target_include_directories(minesync_client PRIVATE
@@ -88,4 +97,5 @@ target_include_directories(minesync_server PRIVATE
 
 target_link_libraries(minesync_server PRIVATE
         minesync_common
+        Crow::Crow
 )
