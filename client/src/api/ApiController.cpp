@@ -2,7 +2,9 @@
 
 #include <regex>
 
+#include "cpr/cpr.h"
 #include "client/Client.h"
+#include "data/World.h"
 
 cpr::Response ApiController::uploadSave(Client* client, cpr::File file) {
     return cpr::Post(
@@ -10,6 +12,25 @@ cpr::Response ApiController::uploadSave(Client* client, cpr::File file) {
         cpr::Multipart{
         {"file", file}
     });
+}
+
+cpr::Response ApiController::syncSave(Client* client, const World& world) {
+    std::string outputPath = (world.rootPath / "testing.zip");
+
+    std::ofstream ofs(outputPath, std::ios::binary);
+    if (!ofs.is_open()) {
+        cpr::Response failResponse;
+        failResponse.status_code = 0;
+        failResponse.error = cpr::Error{static_cast<std::int32_t>(cpr::ErrorCode::INTERNAL_ERROR), "Cannot open output file path"};
+        return failResponse;
+    }
+
+    cpr::Response r = cpr::Download(
+        ofs,
+        cpr::Url{client->getServerUrl() + "/sync"});
+
+    ofs.close();
+    return r;
 }
 
 std::string extractHostname(const std::string& url) {
