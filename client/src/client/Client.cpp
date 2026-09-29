@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "api/ApiController.h"
-#include "files/CacheHandler.h"
+#include "../../common/files/CacheHandler.h"
 
 Client::Client(std::string serverUrl) : serverURL(std::move(serverUrl)) {}
 
