@@ -6,6 +6,6 @@
 
 namespace  ApiController {
     [[nodiscard]] cpr::Response uploadSave(Client* client, cpr::File file);
-    [[nodiscard]] cpr::Response syncSave(Client* client, const World& world);
+    [[nodiscard]] cpr::Response getSave(Client* client, const World& world, const fs::path& output);
     bool isServerReachable(const std::string& host);
 };

@@ -14,10 +14,8 @@ cpr::Response ApiController::uploadSave(Client* client, cpr::File file) {
     });
 }
 
-cpr::Response ApiController::syncSave(Client* client, const World& world) {
-    std::string outputPath = (world.rootPath / "testing.zip");
-
-    std::ofstream ofs(outputPath, std::ios::binary);
+cpr::Response ApiController::getSave(Client* client, const World& world, const fs::path& output) {
+    std::ofstream ofs(output, std::ios::binary);
     if (!ofs.is_open()) {
         cpr::Response failResponse;
         failResponse.status_code = 0;
