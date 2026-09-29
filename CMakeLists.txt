@@ -63,8 +63,8 @@ add_executable(minesync_client
         client/src/client/Client.h
         client/src/api/ApiController.cpp
         client/src/api/ApiController.h
-        client/src/data/World.cpp
-        client/src/data/World.h
+        common/data/World.cpp
+        common/data/World.h
         common/files/ClientAppConfig.h
         server/src/api/ApiController.cpp
         server/src/api/ApiController.h
