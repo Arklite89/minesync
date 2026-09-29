@@ -97,7 +97,7 @@ void MainWindow::scoutDirectoryButtonPressed(Fl_Widget* widget, void* data) {
   auto worldCount = directories.size();
   self.updateStatus(StatusMessage("Scouted " + std::to_string(worldCount) + " world" + (worldCount == 1 ? "." : "s.")));
 
-  for (auto directory: directories) {
+  for (const auto& directory: directories) {
     self.worldSelectChoice->add(directory.filename().c_str());
   }
 }
