@@ -1,11 +1,34 @@
 #include "crow.h"
 
+static const std::string SAVE_FILE_NAME = "uploaded_save.zip";
+
 int main() {
     crow::SimpleApp app;
 
     CROW_ROUTE(app, "/")
     .methods(crow::HTTPMethod::GET)([]() {
         return "Hello world!\n";
+    });
+
+    CROW_ROUTE(app, "/sync")
+    .methods(crow::HTTPMethod::GET)([]() {
+        std::ifstream file(( "./" + SAVE_FILE_NAME), std::ios::binary);
+        if (!file.is_open()) {
+            return crow::response(500, "Error: Failed to open file for writing on server.");
+        }
+
+        std::ostringstream contents;
+        contents << file.rdbuf();
+        file.close();
+
+        crow::response res;
+        res.code = 200;
+        res.body = contents.str();
+
+        res.set_header("Content-Type", "application/octet-stream");
+        res.set_header("Content-Disposition",  "attachment; filename=\"" + SAVE_FILE_NAME + "\"");
+
+        return res;
     });
 
     CROW_ROUTE(app, "/upload")
@@ -17,7 +40,7 @@ int main() {
             return crow::response(400, "Error: No file uploaded or 'file' key missing.");
         }
 
-        std::string filename = "uploaded_save.7z";
+        std::string filename = SAVE_FILE_NAME;
         auto headers = filePart.headers;
 
         std::ofstream outFile(filename, std::ios::binary);
