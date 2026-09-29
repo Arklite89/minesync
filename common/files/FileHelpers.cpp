@@ -4,6 +4,7 @@
 
 #include "FileHelpers.h"
 
+#include <algorithm>
 #include <vector>
 #include <filesystem>
 
@@ -27,4 +28,13 @@ bool FileHelpers::isSaveFolder(const fs::path& directory) {
     if (!fs::exists(directory / "playerdata")) return false;
 
     return true;
+}
+
+void FileHelpers::filterToJustWorlds(std::vector<fs::path>& directories) {
+    directories.erase(
+    std::remove_if(directories.begin(), directories.end(), [](const fs::path& directory) {
+      return !isSaveFolder(directory);
+    })
+    , directories.end()
+    );
 }
