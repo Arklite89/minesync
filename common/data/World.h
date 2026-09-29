@@ -13,7 +13,5 @@ public:
     std::string name;
     fs::path rootPath;
 
-    explicit World(std::string  name, fs::path  rootPath);
-
-    World(std::string &name, fs::path &rootPath);
+    World(std::string name, fs::path rootPath);
 };
