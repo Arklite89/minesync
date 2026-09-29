@@ -36,9 +36,10 @@ private:
 
   static void savesPathBrowseButtonPressed(Fl_Widget* widget, void* data);
   static void scoutDirectoryButtonPressed(Fl_Widget* widget, void* data);
+  static void uploadButtonPressed(Fl_Widget* widget, void* data);
 
   struct StatusMessage {
-    enum Type { Info, Warning, Error };
+    enum Type { Info, Success, Warning, Error };
 
     std::string message;
     float progress{0.0f};
@@ -51,6 +52,7 @@ private:
   void updateStatus(const StatusMessage& message);
 
   void updateWorldSelectChoices();
+  void updateWorlds(const std::vector<fs::path>& directories);
 
 public:
   explicit MainWindow(Client* client);
