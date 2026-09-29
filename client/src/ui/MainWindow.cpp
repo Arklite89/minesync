@@ -86,18 +86,20 @@ void MainWindow::scoutDirectoryButtonPressed(Fl_Widget* widget, void* data) {
 
 
   std::vector<fs::path> directories = FileHelpers::getSubdirectories(savesDirectory);
+  FileHelpers::filterToJustWorlds(directories);
 
-  directories.erase(
-    std::remove_if(directories.begin(), directories.end(), [](const fs::path& directory) {
-      return !FileHelpers::isSaveFolder(directory);
-    })
-    , directories.end()
-    );
+  const auto worldCount = directories.size();
+  if (worldCount > 0)
+    self.updateStatus(StatusMessage("Scouted " + std::to_string(worldCount) + " world" + (worldCount == 1 ? "." : "s.")));
+  else
+    self.updateStatus(StatusMessage("Didn't find any worlds!", 0.0f, StatusMessage::Type::Warning));
 
-  auto worldCount = directories.size();
-  self.updateStatus(StatusMessage("Scouted " + std::to_string(worldCount) + " world" + (worldCount == 1 ? "." : "s.")));
+  self.updateWorldSelectChoices();
+}
 
-  for (const auto& directory: directories) {
-    self.worldSelectChoice->add(directory.filename().c_str());
+void MainWindow::updateWorldSelectChoices() { // NOLINT(readability-make-member-function-const)
+  worldSelectChoice->clear();
+  for (const auto& world : worlds ) {
+    worldSelectChoice->add(world.name.c_str());
   }
 }

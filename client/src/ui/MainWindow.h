@@ -11,6 +11,8 @@
 #include <utility>
 #include <vector>
 
+#include "data/World.h"
+
 namespace UIConfig {
 inline constexpr int WindowWidth = 400;
 inline constexpr int WindowHeight = 500;
@@ -30,6 +32,8 @@ private:
 
   Client* client;
 
+  std::vector<World> worlds;
+
   static void savesPathBrowseButtonPressed(Fl_Widget* widget, void* data);
   static void scoutDirectoryButtonPressed(Fl_Widget* widget, void* data);
 
@@ -45,6 +49,8 @@ private:
   };
 
   void updateStatus(const StatusMessage& message);
+
+  void updateWorldSelectChoices();
 
 public:
   explicit MainWindow(Client* client);
