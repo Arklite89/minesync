@@ -9,7 +9,7 @@
 
 namespace fs = std::filesystem;
 
-std::vector<fs::path> getSubdirectories(const fs::path& directory) {
+std::vector<fs::path> FileHelpers::getSubdirectories(const fs::path& directory) {
     std::vector<fs::path> directories;
 
     for (const auto& entry : fs::directory_iterator(directory)) {
@@ -18,4 +18,13 @@ std::vector<fs::path> getSubdirectories(const fs::path& directory) {
     }
 
     return directories;
+}
+
+bool FileHelpers::isSaveFolder(const fs::path& directory) {
+    if (!fs::is_directory(directory)) return false;
+    if (!fs::exists(directory / "data")) return false;
+    if (!fs::exists(directory / "level.dat")) return false;
+    if (!fs::exists(directory / "playerdata")) return false;
+
+    return true;
 }

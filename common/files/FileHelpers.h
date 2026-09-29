@@ -2,16 +2,14 @@
 // Created by danya on 9/29/26.
 //
 
-#ifndef MINESYNC_FILEHELPERS_H
-#define MINESYNC_FILEHELPERS_H
+#pragma once
+
 #include <filesystem>
 #include <vector>
 
 namespace fs = std::filesystem;
 
 namespace FileHelpers {
-    std::vector<fs::path> getSubdirectories(fs::path path);
+    std::vector<fs::path> getSubdirectories(const fs::path& path);
+    bool isSaveFolder(const fs::path& directory);
 }
-
-
-#endif //MINESYNC_FILEHELPERS_H
