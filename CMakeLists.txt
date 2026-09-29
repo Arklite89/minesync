@@ -32,10 +32,14 @@ add_executable(minesync
         common/lib/zip/zip.h
         common/zip/ZipUtils.cpp
         common/zip/ZipUtils.h
-        client/src/files/CacheHandler.cpp
-        client/src/files/CacheHandler.h
+        common/files/CacheHandler.cpp
+        common/files/CacheHandler.h
         client/config/ClientAppConfig.h
         common/lib/pfd/portable-file-dialogs.h
+        common/files/FileHelpers.cpp
+        common/files/FileHelpers.h
+        client/src/data/World.cpp
+        client/src/data/World.h
 )
 
 target_compile_definitions(minesync PRIVATE
@@ -48,6 +52,7 @@ target_compile_definitions(minesync PRIVATE
 target_include_directories(minesync PRIVATE
         client/src
         client/config
+        common/
         common/lib/zip
         ${FLTK_INCLUDE_DIRS}
         ${CAIRO_INCLUDE_DIRS}
