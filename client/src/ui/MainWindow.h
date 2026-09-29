@@ -37,6 +37,7 @@ private:
   static void savesPathBrowseButtonPressed(Fl_Widget* widget, void* data);
   static void scoutDirectoryButtonPressed(Fl_Widget* widget, void* data);
   static void uploadButtonPressed(Fl_Widget* widget, void* data);
+  static void syncButtonPressed(Fl_Widget* widget, void* data);
 
   struct StatusMessage {
     enum Type { Info, Success, Warning, Error };
@@ -53,6 +54,7 @@ private:
 
   void updateWorldSelectChoices();
   void updateWorlds(const std::vector<fs::path>& directories);
+  std::unique_ptr<World> getSelectedWorld() const;
 
 public:
   explicit MainWindow(Client* client);

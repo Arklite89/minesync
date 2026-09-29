@@ -45,6 +45,7 @@ MainWindow::MainWindow(Client* client) : client(client) {
   uploadButton = new Fl_Button(10, UIConfig::WindowHeight - 80, UIConfig::WindowWidth - 20, 70, "Upload!");
 
   uploadButton->callback(uploadButtonPressed, this);
+  syncButton->callback(syncButtonPressed, this);
 
   window->end();
 };
@@ -123,19 +124,29 @@ void MainWindow::updateWorlds(const std::vector<fs::path>& directories) {
   this->worlds = newWorlds;
 }
 
-void MainWindow::uploadButtonPressed(Fl_Widget* widget, void* data) {
-  auto& self = *static_cast<MainWindow*>(data);
-
-  const char* selectedText = self.worldSelectChoice->text();
-  if (!selectedText) return;
+std::unique_ptr<World> MainWindow::getSelectedWorld() const {
+  const char* selectedText = worldSelectChoice->text();
+  if (!selectedText) return nullptr;
 
   std::string selectedName(selectedText);
 
-  auto selectedWorld = std::find_if(self.worlds.begin(), self.worlds.end(), [&](const World& world) {
+  auto selectedWorld = std::find_if(worlds.begin(), worlds.end(), [&](const World& world) {
         return world.name == selectedName;
     });
 
-  if (selectedWorld == self.worlds.end()) {
+  if (selectedWorld == worlds.end()) {
+    return nullptr;
+  }
+
+  return std::make_unique<World>(*selectedWorld);
+}
+
+void MainWindow::uploadButtonPressed(Fl_Widget* widget, void* data) {
+  auto& self = *static_cast<MainWindow*>(data);
+
+  auto selectedWorld = self.getSelectedWorld();
+
+  if (selectedWorld == nullptr) {
     self.updateStatus(StatusMessage("No valid world selected!", 0.0f, StatusMessage::Type::Error));
     return;
   }
@@ -150,6 +161,24 @@ void MainWindow::uploadButtonPressed(Fl_Widget* widget, void* data) {
   cpr::Response res = ApiController::uploadSave(self.client, cpr::File(zip));
   if (res.status_code == 200) {
     self.updateStatus(StatusMessage("Save uploaded!", 0.0f, StatusMessage::Type::Success));
+  }
+  else {
+    self.updateStatus(StatusMessage("There was an error.", 0.0f, StatusMessage::Type::Error));
+  }
+}
+
+void MainWindow::syncButtonPressed(Fl_Widget* widget, void* data) {
+  auto& self = *static_cast<MainWindow*>(data);
+  auto selectedWorld = self.getSelectedWorld();
+
+  if (selectedWorld == nullptr) {
+    self.updateStatus(StatusMessage("No valid world selected!", 0.0f, StatusMessage::Type::Error));
+  }
+
+  cpr::Response res = ApiController::syncSave(self.client, *selectedWorld);
+
+  if (res.status_code == 200) {
+    self.updateStatus(StatusMessage("Save synced!", 0.0f, StatusMessage::Type::Success));
   }
   else {
     self.updateStatus(StatusMessage("There was an error.", 0.0f, StatusMessage::Type::Error));
