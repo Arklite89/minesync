@@ -6,6 +6,7 @@
 
 #include "ClientAppConfig.h"
 #include "../../../common/zip/ZipUtils.h"
+#include "data/World.h"
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -67,7 +68,7 @@ fs::path CacheHandler::getAppCacheDir() {
     return app_cache;
 }
 
-bool CacheHandler::cacheSaveToZip(const fs::path& save_path) {
+bool CacheHandler::cacheWorldToZip(const World& world) {
     fs::path output_path = getAppCacheDir() / (std::string(ClientAppConfig::SAVE_CACHE_DIRNAME) + ".zip");
 
     if (fs::exists(output_path)) {
@@ -79,7 +80,7 @@ bool CacheHandler::cacheSaveToZip(const fs::path& save_path) {
         }
     }
 
-    return ZipUtils::zipDirectory(save_path, output_path);
+    return ZipUtils::zipDirectory(world.rootPath, output_path);
 }
 
 fs::path CacheHandler::getLatestCachedSaveZip() {

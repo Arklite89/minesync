@@ -2,6 +2,8 @@
 #include <filesystem>
 #include <string>
 
+#include "data/World.h"
+
 namespace fs = std::filesystem;
 
 class CacheHandler {
@@ -26,5 +28,5 @@ public:
 
     static fs::path getAppCacheDir();
     static fs::path getLatestCachedSaveZip();
-    static bool cacheSaveToZip(const fs::path& save_path);
+    static bool cacheWorldToZip(const World& world);
 };
