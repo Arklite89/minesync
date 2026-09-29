@@ -3,6 +3,11 @@
 int main() {
     crow::SimpleApp app;
 
+    CROW_ROUTE(app, "/")
+    .methods(crow::HTTPMethod::GET)([]() {
+        return "Hello world!\n";
+    });
+
     CROW_ROUTE(app, "/upload")
     .methods(crow::HTTPMethod::POST)([](const crow::request& req) {
         crow::multipart::message multipartMsg(req);
