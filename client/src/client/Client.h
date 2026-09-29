@@ -20,5 +20,5 @@ public:
     bool setServerUrl(const std::string& newServerUrl);
 
     [[nodiscard]] bool canConnect() const;
-    bool sendSaveToServer(const fs::path& savePath);
+    //bool sendSaveToServer(const fs::path& savePath);
 };
