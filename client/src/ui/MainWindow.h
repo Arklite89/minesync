@@ -54,7 +54,7 @@ private:
 
   void updateWorldSelectChoices();
   void updateWorlds(const std::vector<fs::path>& directories);
-  std::unique_ptr<World> getSelectedWorld() const;
+  [[nodiscard]] std::unique_ptr<World> getSelectedWorld() const;
 
 public:
   explicit MainWindow(Client* client);

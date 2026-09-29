@@ -16,6 +16,7 @@
 #include "files/CacheHandler.h"
 #include "lib/pfd/portable-file-dialogs.h"
 #include "files/FileHelpers.h"
+#include "zip/ZipUtils.h"
 
 MainWindow::MainWindow(Client* client) : client(client) {
   window = new Fl_Window(
@@ -175,12 +176,26 @@ void MainWindow::syncButtonPressed(Fl_Widget* widget, void* data) {
     self.updateStatus(StatusMessage("No valid world selected!", 0.0f, StatusMessage::Type::Error));
   }
 
-  cpr::Response res = ApiController::syncSave(self.client, *selectedWorld);
+  self.updateStatus(StatusMessage("Fetching...", 0.3f, StatusMessage::Type::Info));
 
-  if (res.status_code == 200) {
-    self.updateStatus(StatusMessage("Save synced!", 0.0f, StatusMessage::Type::Success));
-  }
-  else {
+  const fs::path zipPath = CacheHandler::getAppCacheDir() / "sync.tmp.zip";
+  cpr::Response res = ApiController::getSave(self.client, *selectedWorld, zipPath);
+
+  if (res.status_code != 200) {
     self.updateStatus(StatusMessage("There was an error.", 0.0f, StatusMessage::Type::Error));
+    return;
   }
+
+  std::error_code ec;
+  const bool removed = fs::remove_all(selectedWorld->rootPath, ec);
+
+  if (ec || !removed) {
+    self.updateStatus(StatusMessage("Can't overwrite existing save - is it being used?", 0.0f, StatusMessage::Type::Error));
+    return;
+  }
+
+  self.updateStatus(StatusMessage("Unzipping...", 0.6f, StatusMessage::Type::Info));
+  ZipUtils::extractZip(zipPath, selectedWorld->rootPath);
+
+  self.updateStatus(StatusMessage("Save synced!", 0.0f, StatusMessage::Type::Success));
 }

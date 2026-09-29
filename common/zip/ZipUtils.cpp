@@ -5,7 +5,17 @@
 namespace fs = std::filesystem;
 
 bool ZipUtils::extractZip(const fs::path& zipPath, const fs::path& outputDir) {
-    int result = zip_extract(zipPath.c_str(), outputDir.c_str(), nullptr, nullptr);
+    std::error_code ec;
+    fs::create_directories(outputDir, ec);
+    if (ec) {
+        return false;
+    }
+
+    // backwards compatibility with windows vv
+    std::string zipStr = zipPath.string();
+    std::string outStr = outputDir.string();
+
+int result = zip_extract(zipStr.c_str(), outStr.c_str(), nullptr, nullptr);
     return result == 0;
 }
 
