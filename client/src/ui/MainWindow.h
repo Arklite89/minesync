@@ -36,6 +36,8 @@ private:
   MainPresenter *mainPresenter;
 
 public:
+  void setPresenter(MainPresenter *presenter) { mainPresenter = presenter; }
+
   void setServerUrl(const std::string &url) override;
   void setWorldChoices(const std::vector<std::string> &worldNames) override;
   void setStatus(const std::string &message, StatusType type, float progress) override;
