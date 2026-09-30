@@ -14,6 +14,7 @@ public:
     explicit WorldService(Client* client) : client(client) {}
 
     static std::vector<World> scoutDirectory(const fs::path& savesDir) ;
+    [[nodiscard]] std::string getServerUrl() const { return client->getServerUrl(); }
     bool uploadWorld(const World& world);
     bool syncWorld(const World& world);
 };
