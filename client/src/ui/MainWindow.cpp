@@ -16,6 +16,7 @@
 #include "files/CacheHandler.h"
 #include "lib/pfd/portable-file-dialogs.h"
 #include "files/FileHelpers.h"
+#include "handlers/WorldHandler.h"
 #include "zip/ZipUtils.h"
 
 MainWindow::MainWindow(Client* client) : client(client) {
@@ -93,17 +94,14 @@ void MainWindow::scoutDirectoryButtonPressed(Fl_Widget* widget, void* data) {
   if (!fs::is_directory(savesDirectory))
     return self.updateStatus(StatusMessage{"Selected path is not a directory.", 0.0f, StatusMessage::Type::Error});
 
-  std::vector<fs::path> directories = FileHelpers::getSubdirectories(savesDirectory);
-  FileHelpers::filterToJustWorlds(directories);
+  std::vector<World> scoutedWorlds = WorldHandler::scoutDirectory(savesDirectory);
+  self.updateWorlds(scoutedWorlds);
 
-  const auto worldCount = directories.size();
+  const auto worldCount = scoutedWorlds.size();
   if (worldCount > 0)
     self.updateStatus(StatusMessage("Scouted " + std::to_string(worldCount) + " world" + (worldCount == 1 ? "." : "s.")));
   else
     self.updateStatus(StatusMessage("Didn't find any worlds!", 0.0f, StatusMessage::Type::Warning));
-
-
-  self.updateWorlds(FileHelpers::getWorldsFromDirectories(directories));
 }
 
 void MainWindow::updateWorlds(const std::vector<World>& worlds) {
