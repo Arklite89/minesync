@@ -24,7 +24,7 @@ void MainPresenter::onScoutDirectoryClicked() {
 }
 
 void MainPresenter::onUploadClicked() {
-    auto selectedWorld = mainView.getSelectedWorld();
+    auto selectedWorld = mainView.getSelectedWorldIndex();
 
     if (selectedWorld == nullptr) {
         mainView.setStatus("No valid world selected!", IMainView::StatusType::Error);
@@ -41,7 +41,7 @@ void MainPresenter::onUploadClicked() {
 }
 
 void MainPresenter::onSyncClicked() {
-    auto selectedWorld = mainView.getSelectedWorld();
+    auto selectedWorld = mainView.getSelectedWorldIndex();
 
     if (selectedWorld == nullptr) {
         mainView.setStatus("No valid world selected!", IMainView::StatusType::Error);

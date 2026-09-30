@@ -13,7 +13,7 @@ private:
 public:
     explicit WorldService(Client* client) : client(client) {}
 
-    std::vector<World> scoutDirectory(const fs::path& savesDir);
+    static std::vector<World> scoutDirectory(const fs::path& savesDir) ;
     bool uploadWorld(const World& world);
     bool syncWorld(const World& world);
 };

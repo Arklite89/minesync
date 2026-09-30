@@ -19,7 +19,7 @@ std::vector<World> WorldService::scoutDirectory(const fs::path &savesDir) {
     return FileHelpers::getWorldsFromDirectories(directories);
 };
 
-bool WorldService::uploadWorld(const World& world) {
+bool WorldService::uploadWorld(const World& world) { // NOLINT(readability-make-member-function-const)
     CacheHandler::cacheWorldToZip(world);
     fs::path zip = CacheHandler::getLatestCachedSaveZip();
 
@@ -27,7 +27,7 @@ bool WorldService::uploadWorld(const World& world) {
     return (res.status_code == 200);
 }
 
-bool WorldService::syncWorld(const World &world) {
+bool WorldService::syncWorld(const World &world) { // NOLINT(readability-make-member-function-const)
     const fs::path zipPath = CacheHandler::getAppCacheDir() / "sync.tmp.zip";
     cpr::Response res = ApiController::getSave(client, world, zipPath);
     if (res.status_code != 200) return false;

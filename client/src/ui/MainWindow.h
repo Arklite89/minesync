@@ -10,6 +10,7 @@
 #include <FL//Fl_Progress.H>
 #include <utility>
 #include <vector>
+#include <FL/Fl_Box.H>
 
 #include "data/World.h"
 #include "presenters/MainPresenter.h"
@@ -23,6 +24,7 @@ inline constexpr const char *WindowTitle = "Minesync";
 class MainWindow : public IMainView {
 private:
   Fl_Window *window;
+  Fl_Box *urlLabel;
   Fl_Choice *worldSelectChoice;
   Fl_Input *savesPathInput;
   Fl_Button *savesPathBrowseButton;
@@ -33,24 +35,15 @@ private:
 
   MainPresenter *mainPresenter;
 
-  Client* client;
-
-  static void savesPathBrowseButtonPressed(Fl_Widget* widget, void* data);
-  static void scoutDirectoryButtonPressed(Fl_Widget* widget, void* data);
-  static void uploadButtonPressed(Fl_Widget* widget, void* data);
-  static void syncButtonPressed(Fl_Widget* widget, void* data);
-
-  void updateStatus(const std::string& message, StatusType type = StatusType::Info, float progress = 0.0f);
-
-  void updateWorlds(const std::vector<World>& worlds);
-  void updateWorldSelectChoices();
-
-  [[nodiscard]] const World* getSelectedWorld() const;
-
 public:
-  explicit MainWindow(Client* client);
-  ~MainWindow();
-  MainWindow() = delete;
+  void setServerUrl(const std::string &url) override;
+  void setWorldChoices(const std::vector<std::string> &worldNames) override;
+  void setStatus(const std::string &message, StatusType type, float progress) override;
+  [[nodiscard]] std::string getSavesPathInput() const override;
+  void setSavesPathInput(const std::string &path) override;
+  [[nodiscard]] int getSelectedWorldIndex() const override;
 
+  MainWindow();
+  ~MainWindow();
   void show() const;
 };

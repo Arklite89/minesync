@@ -16,15 +16,13 @@
 #include "lib/pfd/portable-file-dialogs.h"
 #include "zip/ZipUtils.h"
 
-MainWindow::MainWindow(Client* client) : client(client) {
+MainWindow::MainWindow(){
   window = new Fl_Window(
     UIConfig::WindowWidth,
     UIConfig::WindowHeight,
     UIConfig::WindowTitle);
 
-  auto urlLabel = new Fl_Box(0, 10, UIConfig::WindowWidth, 20);
-  urlLabel->copy_label(("Connected to: " + client->getServerUrl()).c_str());
-
+  urlLabel = new Fl_Box(0, 10, UIConfig::WindowWidth, 20);
   constexpr int WINDOW_QUARTER = UIConfig::WindowWidth / 4;
 
   auto worldSelectLabel = new Fl_Box(10, 50, WINDOW_QUARTER - 10, 20, "Select a world:");
@@ -73,17 +71,18 @@ void MainWindow::show() const {
   }
 }
 
-void MainWindow::savesPathBrowseButtonPressed(Fl_Widget* widget, void* data) {
-  auto& self = *static_cast<MainWindow*>(data);
-  auto selection = pfd::select_folder("Select your save file", "." ).result();
+void MainWindow::setServerUrl(const std::string& url) {
+  urlLabel->copy_label(("Connected to: " + url).c_str());
+}
 
-  if (!selection.empty()) {
-    self.savesPathInput->value(selection.c_str());
+void MainWindow::setWorldChoices(const std::vector<std::string> &worldNames) {
+  worldSelectChoice->clear();
+  for (const auto& name : worldNames) {
+    worldSelectChoice->add(name.c_str());
   }
 }
 
-
-void MainWindow::updateStatus(const std::string& message, StatusType type, float progress) { // NOLINT(readability-make-member-function-const)
+void MainWindow::setStatus(const std::string& message, StatusType type, float progress) { // NOLINT(readability-make-member-function-const)
   statusProgress->copy_label(message.c_str());
   statusProgress->value(progress);
 
@@ -95,28 +94,14 @@ void MainWindow::updateStatus(const std::string& message, StatusType type, float
   Fl::check();
 }
 
-void MainWindow::updateWorlds(const std::vector<World>& worlds) {
-  client->worlds = worlds;
-  updateWorldSelectChoices();
+std::string MainWindow::getSavesPathInput() const {
+  return savesPathInput->value();
 }
 
-void MainWindow::updateWorldSelectChoices() { // NOLINT(readability-make-member-function-const)
-  worldSelectChoice->clear();
-  for (const auto& world : client->worlds ) {
-    worldSelectChoice->add(world.name.c_str());
-  }
+void MainWindow::setSavesPathInput(const std::string& path) {
+  savesPathInput->value(path.c_str());
 }
 
-const World* MainWindow::getSelectedWorld() const {
-  const char* selectedText = worldSelectChoice->text();
-  if (!selectedText) return nullptr;
-
-  std::string selectedName(selectedText);
-  const std::vector<World>& worlds = client->worlds;
-
-  auto selectedWorld = std::find_if(worlds.begin(), worlds.end(), [&](const World& world) {
-        return world.name == selectedName;
-    });
-
-  return (selectedWorld != worlds.end()) ? &*selectedWorld : nullptr;
+int MainWindow::getSelectedWorldIndex() const {
+  return worldSelectChoice->value();
 }
