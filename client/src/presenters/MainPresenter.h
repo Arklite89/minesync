@@ -11,7 +11,7 @@ public:
     virtual void setStatus(const std::string& message, StatusType type = StatusType::Info, float progress = 0.0f);
     virtual std::string getSavesPathInput() const = 0;
     virtual void setSavesPathInput(const std::string& path) = 0;
-    virtual int getSelectedWorldIndex() const = 0;
+    virtual World* getSelectedWorld() const = 0;
 };
 
 class MainPresenter {
