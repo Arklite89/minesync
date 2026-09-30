@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "data/World.h"
+#include "presenters/MainPresenter.h"
 
 namespace UIConfig {
 inline constexpr int WindowWidth = 400;
@@ -19,7 +20,7 @@ inline constexpr int WindowHeight = 500;
 inline constexpr const char *WindowTitle = "Minesync";
 } // namespace UIConfig
 
-class MainWindow {
+class MainWindow : public IMainView {
 private:
   Fl_Window *window;
   Fl_Choice *worldSelectChoice;
@@ -30,6 +31,8 @@ private:
   Fl_Button *syncButton;
   Fl_Button *uploadButton;
 
+  MainPresenter *mainPresenter;
+
   Client* client;
 
   static void savesPathBrowseButtonPressed(Fl_Widget* widget, void* data);
@@ -37,18 +40,7 @@ private:
   static void uploadButtonPressed(Fl_Widget* widget, void* data);
   static void syncButtonPressed(Fl_Widget* widget, void* data);
 
-  struct StatusMessage {
-    enum Type { Info, Success, Warning, Error };
-
-    std::string message;
-    float progress{0.0f};
-    Type type{Info};
-
-    explicit StatusMessage(std::string msg, float progress = 0.0f, Type type = Type::Info)
-    : message(std::move(msg)), progress(progress), type(type) {}
-  };
-
-  void updateStatus(const StatusMessage& message);
+  void updateStatus(const std::string& message, StatusType type = StatusType::Info, float progress = 0.0f);
 
   void updateWorlds(const std::vector<World>& worlds);
   void updateWorldSelectChoices();

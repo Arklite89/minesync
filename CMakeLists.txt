@@ -66,8 +66,12 @@ add_executable(minesync_client
         common/data/World.cpp
         common/data/World.h
         common/files/ClientAppConfig.h
-        server/src/api/ApiController.cpp
-        server/src/api/ApiController.h
+        client/src/services/WorldService.cpp
+        client/src/services/WorldService.h
+        client/src/services/WorldService.h
+        client/src/services/WorldService.cpp
+        client/src/presenters/MainPresenter.cpp
+        client/src/presenters/MainPresenter.h
 )
 
 target_include_directories(minesync_client PRIVATE

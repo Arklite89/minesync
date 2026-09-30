@@ -6,8 +6,9 @@
 
 namespace fs = std::filesystem;
 
-namespace WorldHandler {
+class WorldService {
+public:
     std::vector<World> scoutDirectory(const fs::path& savesDir);
     bool uploadWorld(const World& world);
     bool syncWorld(const World& world);
-}
+};
