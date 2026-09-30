@@ -14,4 +14,5 @@ public:
     fs::path rootPath;
 
     World(std::string name, fs::path rootPath);
+    World(fs::path rootPath);
 };
