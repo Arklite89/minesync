@@ -2,8 +2,10 @@
 
 #include <optional>
 #import <string>
+#include <vector>
 
 #include "cpr/filesystem.h"
+#include "data/World.h"
 
 namespace fs = std::filesystem;
 
@@ -13,11 +15,14 @@ private:
 
     std::string serverURL;
 
+
 public:
-    static std::unique_ptr<Client> create(const std::string &newServerUrl);
+    std::vector<World> worlds;
 
     std::string getServerUrl();
     bool setServerUrl(const std::string& newServerUrl);
+
+    static std::unique_ptr<Client> create(const std::string &newServerUrl);
 
     [[nodiscard]] bool canConnect() const;
     //bool sendSaveToServer(const fs::path& savePath);

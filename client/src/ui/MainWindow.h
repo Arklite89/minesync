@@ -32,8 +32,6 @@ private:
 
   Client* client;
 
-  std::vector<World> worlds;
-
   static void savesPathBrowseButtonPressed(Fl_Widget* widget, void* data);
   static void scoutDirectoryButtonPressed(Fl_Widget* widget, void* data);
   static void uploadButtonPressed(Fl_Widget* widget, void* data);
@@ -53,7 +51,7 @@ private:
   void updateStatus(const StatusMessage& message);
 
   void updateWorldSelectChoices();
-  [[nodiscard]] std::unique_ptr<World> getSelectedWorld() const;
+  [[nodiscard]] const World* getSelectedWorld() const;
 
 public:
   explicit MainWindow(Client* client);

@@ -93,7 +93,6 @@ void MainWindow::scoutDirectoryButtonPressed(Fl_Widget* widget, void* data) {
   if (!fs::is_directory(savesDirectory))
     return self.updateStatus(StatusMessage{"Selected path is not a directory.", 0.0f, StatusMessage::Type::Error});
 
-
   std::vector<fs::path> directories = FileHelpers::getSubdirectories(savesDirectory);
   FileHelpers::filterToJustWorlds(directories);
 
@@ -103,33 +102,30 @@ void MainWindow::scoutDirectoryButtonPressed(Fl_Widget* widget, void* data) {
   else
     self.updateStatus(StatusMessage("Didn't find any worlds!", 0.0f, StatusMessage::Type::Warning));
 
-  self.worlds = FileHelpers::getWorldsFromDirectories(directories);
+  self.client->worlds = FileHelpers::getWorldsFromDirectories(directories);
 
   self.updateWorldSelectChoices();
 }
 
 void MainWindow::updateWorldSelectChoices() { // NOLINT(readability-make-member-function-const)
   worldSelectChoice->clear();
-  for (const auto& world : worlds ) {
+  for (const auto& world : client->worlds ) {
     worldSelectChoice->add(world.name.c_str());
   }
 }
 
-std::unique_ptr<World> MainWindow::getSelectedWorld() const {
+const World* MainWindow::getSelectedWorld() const {
   const char* selectedText = worldSelectChoice->text();
   if (!selectedText) return nullptr;
 
   std::string selectedName(selectedText);
+  const std::vector<World>& worlds = client->worlds;
 
   auto selectedWorld = std::find_if(worlds.begin(), worlds.end(), [&](const World& world) {
         return world.name == selectedName;
     });
 
-  if (selectedWorld == worlds.end()) {
-    return nullptr;
-  }
-
-  return std::make_unique<World>(*selectedWorld);
+  return (selectedWorld != worlds.end()) ? &*selectedWorld : nullptr;
 }
 
 void MainWindow::uploadButtonPressed(Fl_Widget* widget, void* data) {
