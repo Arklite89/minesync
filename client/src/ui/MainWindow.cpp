@@ -102,9 +102,13 @@ void MainWindow::scoutDirectoryButtonPressed(Fl_Widget* widget, void* data) {
   else
     self.updateStatus(StatusMessage("Didn't find any worlds!", 0.0f, StatusMessage::Type::Warning));
 
-  self.client->worlds = FileHelpers::getWorldsFromDirectories(directories);
 
-  self.updateWorldSelectChoices();
+  self.updateWorlds(FileHelpers::getWorldsFromDirectories(directories));
+}
+
+void MainWindow::updateWorlds(const std::vector<World>& worlds) {
+  client->worlds = worlds;
+  updateWorldSelectChoices();
 }
 
 void MainWindow::updateWorldSelectChoices() { // NOLINT(readability-make-member-function-const)

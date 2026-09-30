@@ -50,7 +50,9 @@ private:
 
   void updateStatus(const StatusMessage& message);
 
+  void updateWorlds(const std::vector<World>& worlds);
   void updateWorldSelectChoices();
+
   [[nodiscard]] const World* getSelectedWorld() const;
 
 public:
