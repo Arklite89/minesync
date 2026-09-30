@@ -7,10 +7,13 @@
 #include <filesystem>
 #include <vector>
 
+#include "data/World.h"
+
 namespace fs = std::filesystem;
 
 namespace FileHelpers {
     std::vector<fs::path> getSubdirectories(const fs::path& path);
     bool isSaveFolder(const fs::path& directory);
     void filterToJustWorlds(std::vector<fs::path>& directories);
+    std::vector<World> getWorldsFromDirectories(const std::vector<fs::path>& directories);
 }

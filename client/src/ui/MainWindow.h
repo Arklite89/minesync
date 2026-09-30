@@ -53,7 +53,6 @@ private:
   void updateStatus(const StatusMessage& message);
 
   void updateWorldSelectChoices();
-  void updateWorlds(const std::vector<fs::path>& directories);
   [[nodiscard]] std::unique_ptr<World> getSelectedWorld() const;
 
 public:

@@ -8,6 +8,8 @@
 #include <vector>
 #include <filesystem>
 
+#include "data/World.h"
+
 namespace fs = std::filesystem;
 
 std::vector<fs::path> FileHelpers::getSubdirectories(const fs::path& directory) {
@@ -37,4 +39,14 @@ void FileHelpers::filterToJustWorlds(std::vector<fs::path>& directories) {
     })
     , directories.end()
     );
+}
+
+std::vector<World> FileHelpers::getWorldsFromDirectories(const std::vector<fs::path>& directories) {
+    std::vector<World> newWorlds;
+
+    for (const auto& directory: directories) {
+        newWorlds.push_back(*new World(directory));
+    }
+
+    return newWorlds;
 }

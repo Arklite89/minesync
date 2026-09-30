@@ -103,7 +103,7 @@ void MainWindow::scoutDirectoryButtonPressed(Fl_Widget* widget, void* data) {
   else
     self.updateStatus(StatusMessage("Didn't find any worlds!", 0.0f, StatusMessage::Type::Warning));
 
-  self.updateWorlds(directories);
+  self.worlds = FileHelpers::getWorldsFromDirectories(directories);
 
   self.updateWorldSelectChoices();
 }
@@ -113,16 +113,6 @@ void MainWindow::updateWorldSelectChoices() { // NOLINT(readability-make-member-
   for (const auto& world : worlds ) {
     worldSelectChoice->add(world.name.c_str());
   }
-}
-
-void MainWindow::updateWorlds(const std::vector<fs::path>& directories) {
-  std::vector<World> newWorlds;
-
-  for (const auto& directory: directories) {
-    newWorlds.push_back(*new World(directory.filename(), directory));
-  }
-
-  this->worlds = newWorlds;
 }
 
 std::unique_ptr<World> MainWindow::getSelectedWorld() const {
