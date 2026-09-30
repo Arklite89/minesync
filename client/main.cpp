@@ -8,10 +8,17 @@
 
 int main(int argc, char **argv) {
   auto client = Client::create("http://localhost:18080");
-
   if (!client) { return 1; }
 
-  MainWindow app(client.release());
-  app.show();
+  WorldService service(&*client);
+
+  MainWindow window;
+  MainPresenter presenter(window, service);
+
+  window.setPresenter(&presenter);
+  presenter.initialize();
+
+  window.show();
+
   return Fl::run();
 }
