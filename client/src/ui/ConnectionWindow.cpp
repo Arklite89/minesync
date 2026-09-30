@@ -47,7 +47,7 @@ void ConnectionWindow::connectButtonPressed(Fl_Widget* widget, void* data) {
         return;
     }
 
-    MainWindow* redirect = new MainWindow(client.release());
+    MainWindow* redirect = new MainWindow();
     redirect->show();
     Fl::delete_widget(self->window);
 }
