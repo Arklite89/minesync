@@ -77,8 +77,18 @@ void MainWindow::setServerUrl(const std::string& url) {
 
 void MainWindow::setWorldChoices(const std::vector<std::string> &worldNames) {
   worldSelectChoice->clear();
+
   for (const auto& name : worldNames) {
     worldSelectChoice->add(name.c_str());
+  }
+
+  if (!worldNames.empty()) {
+    worldSelectChoice->value(0);
+  }
+
+  worldSelectChoice->redraw();
+  if (worldSelectChoice->window()) {
+    worldSelectChoice->window()->redraw();
   }
 }
 
