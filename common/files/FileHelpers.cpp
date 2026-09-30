@@ -45,7 +45,7 @@ std::vector<World> FileHelpers::getWorldsFromDirectories(const std::vector<fs::p
     std::vector<World> newWorlds;
 
     for (const auto& directory: directories) {
-        newWorlds.push_back(*new World(directory));
+        newWorlds.emplace_back(directory);
     }
 
     return newWorlds;
