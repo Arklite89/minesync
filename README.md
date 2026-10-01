@@ -5,4 +5,4 @@ Tool for syncing minecraft worlds across multiple devices.
 
 ### building
 
-cmake --build /cmake-build --target [minesync_client/minesync_server] -j 6
+`cmake --build ./cmake-build --target [minesync_client/minesync_server] -j 6`
