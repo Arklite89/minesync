@@ -1145,7 +1145,9 @@ inline std::string internal::file_dialog::string_result()
 #else
     // Strip the newline character
     auto ret = m_async->result();
-    return ret.back() == '\n' ? ret.substr(0, ret.size() - 1) : ret;
+    if (!ret.empty() && ret.back() == '\n')
+        return ret.substr(0, ret.size() - 1);
+    return ret;
 #endif
 }
 
