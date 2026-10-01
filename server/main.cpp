@@ -1,6 +1,7 @@
 #include "crow.h"
 
 static const std::string SAVE_FILE_NAME = "uploaded_save.zip";
+static const std::string SAVE_FILE_EXTENSION = ".zip";
 
 int main() {
     crow::SimpleApp app;
@@ -11,8 +12,12 @@ int main() {
     });
 
     CROW_ROUTE(app, "/sync")
-    .methods(crow::HTTPMethod::GET)([]() {
-        std::ifstream file(( "./" + SAVE_FILE_NAME), std::ios::binary);
+    .methods(crow::HTTPMethod::GET)([](const crow::request& req) {
+        const char* filename = req.url_params.get("name");
+        if (!filename)
+            return crow::response(400, "Missing 'name' query parameter");
+
+        std::ifstream file(( "./" + std::string(filename) ), std::ios::binary);
         if (!file.is_open()) {
             return crow::response(500, "Error: Failed to open file for writing on server.");
         }
@@ -35,12 +40,15 @@ int main() {
     .methods(crow::HTTPMethod::POST)([](const crow::request& req) {
         crow::multipart::message multipartMsg(req);
 
-        auto filePart = multipartMsg.get_part_by_name("file");
-        if (filePart.body.empty()) {
-            return crow::response(400, "Error: No file uploaded or 'file' key missing.");
-        }
+        auto namePart = multipartMsg.get_part_by_name("name");
+        if (namePart.body.empty())
+            return crow::response(400, "Error: Invalid or missing name key.");
 
-        std::string filename = SAVE_FILE_NAME;
+        auto filePart = multipartMsg.get_part_by_name("file");
+        if (filePart.body.empty())
+            return crow::response(400, "Error: No file uploaded or 'file' key missing.");
+
+        std::string filename = namePart.body;
         auto headers = filePart.headers;
 
         std::ofstream outFile(filename, std::ios::binary);
