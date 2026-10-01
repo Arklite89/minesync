@@ -27,6 +27,6 @@ public:
     }
 
     static fs::path getAppCacheDir();
-    static fs::path getLatestCachedSaveZip();
+    static fs::path getLatestCachedSaveZip(const World& world);
     static bool cacheWorldToZip(const World& world);
 };

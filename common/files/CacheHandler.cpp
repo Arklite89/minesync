@@ -69,7 +69,7 @@ fs::path CacheHandler::getAppCacheDir() {
 }
 
 bool CacheHandler::cacheWorldToZip(const World& world) {
-    fs::path output_path = getAppCacheDir() / (std::string(ClientAppConfig::SAVE_CACHE_DIRNAME) + ".zip");
+    fs::path output_path = getAppCacheDir() / (world.name + ".zip");
 
     if (fs::exists(output_path)) {
         std::error_code ec;
@@ -83,8 +83,8 @@ bool CacheHandler::cacheWorldToZip(const World& world) {
     return ZipUtils::zipDirectory(world.rootPath, output_path);
 }
 
-fs::path CacheHandler::getLatestCachedSaveZip() {
-    fs::path returnPath = getAppCacheDir() / (std::string(ClientAppConfig::SAVE_CACHE_DIRNAME) + ".zip");
+fs::path CacheHandler::getLatestCachedSaveZip(const World& world) {
+    fs::path returnPath = getAppCacheDir() / (world.name + ".zip");
     if (fs::exists(returnPath)) { return returnPath; }
     return {};
 }

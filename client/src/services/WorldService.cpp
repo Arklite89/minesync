@@ -21,7 +21,7 @@ std::vector<World> WorldService::scoutDirectory(const fs::path &savesDir) {
 
 bool WorldService::uploadWorld(const World& world) { // NOLINT(readability-make-member-function-const)
     CacheHandler::cacheWorldToZip(world);
-    fs::path zip = CacheHandler::getLatestCachedSaveZip();
+    fs::path zip = CacheHandler::getLatestCachedSaveZip(world);
 
     cpr::Response res = ApiController::uploadSave(client, cpr::File(zip));
     return (res.status_code == 200);
