@@ -1,7 +1,5 @@
 #include "ApiController.h"
-
 #include <regex>
-
 #include "cpr/cpr.h"
 #include "client/Client.h"
 #include "data/World.h"

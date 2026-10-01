@@ -1,5 +1,3 @@
-
-
 #include "ConnectionWindow.h"
 
 #include <FL/Fl.H>
