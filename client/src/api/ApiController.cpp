@@ -10,6 +10,7 @@ cpr::Response ApiController::uploadSave(Client* client, cpr::File file) {
     return cpr::Post(
         cpr::Url{client->getServerUrl() + "/upload"},
         cpr::Multipart{
+        {"name", fs::path(file.filepath).filename()},
         {"file", file}
     });
 }
@@ -25,7 +26,10 @@ cpr::Response ApiController::getSave(Client* client, const World& world, const f
 
     cpr::Response r = cpr::Download(
         ofs,
-        cpr::Url{client->getServerUrl() + "/sync"});
+        cpr::Url{client->getServerUrl() + "/sync"},
+        cpr::Parameters{
+        {"name", world.name + ".zip"}
+        });
 
     ofs.close();
     return r;
