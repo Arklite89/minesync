@@ -72,6 +72,10 @@ add_executable(minesync_client
         client/src/services/WorldService.cpp
         client/src/presenters/MainPresenter.cpp
         client/src/presenters/MainPresenter.h
+        client/src/coordinators/AppCoordinator.cpp
+        client/src/coordinators/AppCoordinator.h
+        client/src/presenters/ConnectionPresenter.cpp
+        client/src/presenters/ConnectionPresenter.h
 )
 
 target_include_directories(minesync_client PRIVATE
