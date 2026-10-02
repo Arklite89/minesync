@@ -5,6 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
+
+# Disable CPR internal install targets
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(CPR_INSTALL OFF CACHE BOOL "" FORCE)
+
+# CPR Dependency
 FetchContent_Declare(
         cpr
         GIT_REPOSITORY https://github.com/libcpr/cpr.git
@@ -12,6 +18,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cpr)
 
+# Crow Dependency
 FetchContent_Declare(
         crow
         GIT_REPOSITORY https://github.com/CrowCpp/Crow.git
@@ -68,8 +75,6 @@ add_executable(minesync_client
         common/files/ClientAppConfig.h
         client/src/services/WorldService.cpp
         client/src/services/WorldService.h
-        client/src/services/WorldService.h
-        client/src/services/WorldService.cpp
         client/src/presenters/MainPresenter.cpp
         client/src/presenters/MainPresenter.h
         client/src/coordinators/AppCoordinator.cpp
@@ -107,3 +112,37 @@ target_link_libraries(minesync_server PRIVATE
         minesync_common
         Crow::Crow
 )
+
+# ==============================================================================
+#  Install Rules & Packaging (CPack)
+# ==============================================================================
+include(GNUInstallDirs)
+
+install(TARGETS minesync_client
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT client
+)
+
+install(TARGETS minesync_server
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT server
+)
+
+set(CPACK_PACKAGE_NAME "minesync")
+set(CPACK_PACKAGE_VENDOR "MineSync")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MineSync Client and Server synchronization app")
+set(CPACK_PACKAGE_VERSION_MAJOR 1)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+
+set(CPACK_STRIP_FILES TRUE)
+set(CPACK_GENERATOR "TGZ;TXZ")
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+
+# ONLY package these components; ignore third-party 'Unspecified' targets
+set(CPACK_COMPONENTS_ALL client server)
+
+set(CPACK_COMPONENT_CLIENT_DISPLAY_NAME "MineSync Client GUI")
+set(CPACK_COMPONENT_SERVER_DISPLAY_NAME "MineSync Server")
+
+include(CPack)
