@@ -23,7 +23,7 @@ void MainPresenter::onScoutDirectoryClicked() {
     cachedWorlds = WorldService::scoutDirectory(savesDirectory);
     const auto worldCount = cachedWorlds.size();
     if (worldCount > 0)
-        mainView.setStatus("Scouted " + std::to_string(worldCount) + "world" + (worldCount == 1 ? "." : "s."), IMainView::StatusType::Success);
+        mainView.setStatus("Scouted " + std::to_string(worldCount) + " world" + (worldCount == 1 ? "." : "s."), IMainView::StatusType::Success);
     else
         mainView.setStatus("Didn't find any worlds!", IMainView::StatusType::Warning);
 
