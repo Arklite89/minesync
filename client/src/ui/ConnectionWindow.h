@@ -7,6 +7,18 @@
 
 #include "presenters/ConnectionPresenter.h"
 
+class IConnectionView {
+public:
+    virtual ~IConnectionView() = default;
+
+    virtual void setUrlPrefix(std::string urlPrefix) = 0;
+    [[nodiscard]] virtual std::string getUrlInput() const = 0;
+    virtual void setButtonLabel(std::string label);
+
+    virtual void show() = 0;
+    virtual void hide() = 0;
+};
+
 class ConnectionWindow : IConnectionView {
 private:
     Fl_Window *window;

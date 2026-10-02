@@ -21,6 +21,22 @@ inline constexpr int WindowHeight = 500;
 inline constexpr const char *WindowTitle = "Minesync";
 } // namespace UIConfig
 
+class IMainView {
+public:
+  enum class StatusType { Info, Success, Warning, Error};
+
+  virtual ~IMainView() = default;
+  virtual void setServerUrl(const std::string& url) = 0;
+  virtual void setWorldChoices(const std::vector<std::string>& worldNames) = 0;
+  virtual void setStatus(const std::string& message, StatusType type = StatusType::Info, float progress = 0.0f) = 0;
+  [[nodiscard]] virtual std::string getSavesPathInput() const = 0;
+  virtual void setSavesPathInput(const std::string& path) = 0;
+  [[nodiscard]] virtual int getSelectedWorldIndex() const = 0;
+
+  virtual void show() = 0;
+  virtual void hide() = 0;
+};
+
 class MainWindow : public IMainView {
 private:
   Fl_Window *window;
