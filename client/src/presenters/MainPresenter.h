@@ -1,6 +1,7 @@
 #pragma once
 #include "services/WorldService.h"
-#include "ui/MainWindow.h"
+
+class IMainView;
 
 class MainPresenter {
 private:
@@ -9,9 +10,7 @@ private:
     std::vector<World> cachedWorlds;
 public:
     MainPresenter(IMainView& view, const WorldService& worldService) : mainView(view), worldService(worldService) {};
-    void initialize() {
-        mainView.setServerUrl(worldService.getServerUrl());
-    }
+    void initialize();
     void onScoutDirectoryClicked();
     void onUploadClicked();
     void onSyncClicked();

@@ -1,11 +1,10 @@
 #include "ConnectionWindow.h"
 
-#include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Input.H>
 
-#include "MainWindow.h"
+#include "presenters/ConnectionPresenter.h"
 
 ConnectionWindow::ConnectionWindow() {
     window = new Fl_Window(640, 120, "Specify a Connection");

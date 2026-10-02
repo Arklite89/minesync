@@ -5,8 +5,12 @@
 #include "MainPresenter.h"
 
 #include "api/ApiController.h"
-#include "cpr/filesystem.h"
 #include "files/CacheHandler.h"
+#include "ui/MainWindow.h"
+
+void MainPresenter::initialize() {
+    mainView.setServerUrl(worldService.getServerUrl());
+}
 
 void MainPresenter::onScoutDirectoryClicked() {
     fs::path savesDirectory = mainView.getSavesPathInput();

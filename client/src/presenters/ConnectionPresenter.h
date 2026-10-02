@@ -1,6 +1,7 @@
 #pragma once
+#include <string>
 
-#include "ui/ConnectionWindow.h"
+class IConnectionView;
 
 class ConnectionPresenter {
 private:
@@ -8,6 +9,6 @@ private:
 public:
     const std::string URL_PREFIX = "http://";
 
-    ConnectionPresenter(IConnectionView& connectionView) : connectionView(connectionView) {}
+    explicit ConnectionPresenter(IConnectionView& connectionView) : connectionView(connectionView) {}
     void onConnectButtonClicked() const;
 };

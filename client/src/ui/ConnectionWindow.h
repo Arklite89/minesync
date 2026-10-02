@@ -5,7 +5,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Window.H>
 
-#include "presenters/ConnectionPresenter.h"
+class ConnectionPresenter;
 
 class IConnectionView {
 public:
@@ -13,13 +13,13 @@ public:
 
     virtual void setUrlPrefix(std::string urlPrefix) = 0;
     [[nodiscard]] virtual std::string getUrlInput() const = 0;
-    virtual void setButtonLabel(std::string label);
+    virtual void setButtonLabel(std::string label) = 0;
 
     virtual void show() = 0;
     virtual void hide() = 0;
 };
 
-class ConnectionWindow : IConnectionView {
+class ConnectionWindow : public IConnectionView {
 private:
     Fl_Window *window;
     Fl_Box *urlPrefix;

@@ -1,8 +1,7 @@
-
 #include "ConnectionPresenter.h"
 
 #include "client/Client.h"
-
+#include "ui/ConnectionWindow.h"
 
 void ConnectionPresenter::onConnectButtonClicked() const {
     const std::string connectionString = URL_PREFIX + connectionView.getUrlInput();
