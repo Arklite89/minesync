@@ -36,6 +36,9 @@ private:
   MainPresenter *mainPresenter;
 
 public:
+  MainWindow();
+  ~MainWindow() override;
+
   void setPresenter(MainPresenter *presenter) { mainPresenter = presenter; }
 
   void setServerUrl(const std::string &url) override;
@@ -45,7 +48,6 @@ public:
   void setSavesPathInput(const std::string &path) override;
   [[nodiscard]] int getSelectedWorldIndex() const override;
 
-  MainWindow();
-  ~MainWindow();
-  void show() const;
+  void show() override { if (window) window->show(); };
+  void hide() override { if (window) window->hide(); };
 };

@@ -65,12 +65,6 @@ MainWindow::~MainWindow() {
   delete window;
 }
 
-void MainWindow::show() const {
-  if (window) {
-    window->show();
-  }
-}
-
 void MainWindow::setServerUrl(const std::string& url) {
   urlLabel->copy_label(("Connected to: " + url).c_str());
 }
