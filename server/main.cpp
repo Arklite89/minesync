@@ -31,7 +31,7 @@ int main() {
         res.body = contents.str();
 
         res.set_header("Content-Type", "application/octet-stream");
-        res.set_header("Content-Disposition",  "attachment; filename=\"" + SAVE_FILE_NAME + "\"");
+        res.set_header("Content-Disposition",  "attachment; filename=\"" + std::string(filename) + "\"");
 
         return res;
     });
@@ -40,23 +40,23 @@ int main() {
     .methods(crow::HTTPMethod::POST)([](const crow::request& req) {
         crow::multipart::message multipartMsg(req);
 
-        auto namePart = multipartMsg.get_part_by_name("name");
-        if (namePart.body.empty())
+        auto [nameHeaders, name] = multipartMsg.get_part_by_name("name");
+        if (name.empty())
             return crow::response(400, "Error: Invalid or missing name key.");
 
-        auto filePart = multipartMsg.get_part_by_name("file");
-        if (filePart.body.empty())
+        auto [fileHeaders, fileBody] = multipartMsg.get_part_by_name("file");
+        if (fileBody.empty())
             return crow::response(400, "Error: No file uploaded or 'file' key missing.");
 
-        std::string filename = namePart.body;
-        auto headers = filePart.headers;
+        std::string filename = name;
+        auto headers = fileHeaders;
 
         std::ofstream outFile(filename, std::ios::binary);
         if (!outFile) {
             return crow::response(500, "Error: Failed to open file for writing on server.");
         }
 
-        outFile << filePart.body;
+        outFile << fileBody;
         outFile.close();
 
         crow::json::wvalue responseJson;
