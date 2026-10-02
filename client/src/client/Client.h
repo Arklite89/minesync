@@ -23,7 +23,5 @@ public:
     bool setServerUrl(const std::string& newServerUrl);
 
     static std::unique_ptr<Client> create(const std::string &newServerUrl);
-
     [[nodiscard]] bool canConnect() const;
-    //bool sendSaveToServer(const fs::path& savePath);
 };
