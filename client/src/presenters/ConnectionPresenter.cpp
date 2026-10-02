@@ -1,6 +1,7 @@
 #include "ConnectionPresenter.h"
 
 #include "client/Client.h"
+#include "coordinators/AppCoordinator.h"
 #include "ui/ConnectionWindow.h"
 
 void ConnectionPresenter::onConnectButtonClicked() const {
@@ -14,4 +15,6 @@ void ConnectionPresenter::onConnectButtonClicked() const {
         connectionView.setButtonLabel("Failed to connect to server.");
         return;
     }
+
+    if (onConnected) onConnected(std::move(client));
 }
