@@ -1,0 +1,65 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    name: Build (${{ matrix.platform.name }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - name: Linux x86_64
+            cpack_gen: TGZ
+            packages: libfltk1.3-dev libssl-dev libx11-dev
+            cmake_flags: ""
+
+          - name: Windows x64
+            cpack_gen: ZIP
+            packages: mingw-w64 libfltk1.3-dev
+            cmake_flags: >-
+              -DCMAKE_SYSTEM_NAME=Windows
+              -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc
+              -DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++
+              -DCMAKE_RC_COMPILER=x86_64-w64-mingw32-windres
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build ${{ matrix.platform.packages }}
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            ${{ matrix.platform.cmake_flags }}
+
+      - name: Build Project
+        run: cmake --build build --config Release
+
+      - name: Package with CPack
+        run: |
+          cd build
+          cpack -G ${{ matrix.platform.cpack_gen }} -C Release
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/*.zip
+            build/*.tar.gz
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
