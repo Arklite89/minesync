@@ -1,7 +1,5 @@
 #pragma once
 #include <filesystem>
-#include <string>
-
 #include "data/World.h"
 
 namespace fs = std::filesystem;

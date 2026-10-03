@@ -1,7 +1,3 @@
-//
-// Created by danya on 9/30/26.
-//
-
 #include "WorldService.h"
 
 #include "api/ApiController.h"
@@ -23,7 +19,7 @@ bool WorldService::uploadWorld(const World& world) { // NOLINT(readability-make-
     CacheHandler::cacheWorldToZip(world);
     fs::path zip = CacheHandler::getLatestCachedSaveZip(world);
 
-    cpr::Response res = ApiController::uploadSave(client, cpr::File(zip));
+    cpr::Response res = ApiController::uploadSave(client, cpr::File(zip.string()));
     return (res.status_code == 200);
 }
 

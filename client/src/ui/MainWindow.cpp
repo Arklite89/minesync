@@ -1,20 +1,15 @@
 #include "MainWindow.h"
 
-#include <algorithm>
-
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Window.H>
-#include <FL/Fl_Flex.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Progress.H>
 
-#include "api/ApiController.h"
 #include "files/CacheHandler.h"
 #include "lib/pfd/portable-file-dialogs.h"
-#include "zip/ZipUtils.h"
 
 MainWindow::MainWindow(){
   window = new Fl_Window(

@@ -1,18 +1,14 @@
 #pragma once
-#include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <string>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Input.H>
 
-#include "client/Client.h"
 #include <FL//Fl_Progress.H>
-#include <utility>
 #include <vector>
 #include <FL/Fl_Box.H>
 
-#include "data/World.h"
 #include "presenters/MainPresenter.h"
 
 namespace UIConfig {

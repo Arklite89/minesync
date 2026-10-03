@@ -1,10 +1,8 @@
 #pragma once
 
-#include <optional>
-#import <string>
+#include <string>
 #include <vector>
 
-#include "cpr/filesystem.h"
 #include "data/World.h"
 
 namespace fs = std::filesystem;
