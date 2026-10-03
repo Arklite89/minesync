@@ -22,7 +22,7 @@ int result = zip_extract(zipStr.c_str(), outStr.c_str(), nullptr, nullptr);
 bool ZipUtils::zipDirectory(const fs::path& sourceDir, const fs::path& outputZip) {
     if (!fs::exists(sourceDir) || !fs::is_directory(sourceDir)) { return false; }
 
-    struct zip_t* zip = zip_open(outputZip.c_str(), ZIP_DEFAULT_COMPRESSION_LEVEL, 'w');
+    struct zip_t* zip = zip_open(outputZip.string().c_str(), ZIP_DEFAULT_COMPRESSION_LEVEL, 'w');
     if (!zip) { return false; }
 
     for (const auto& entry : fs::recursive_directory_iterator(sourceDir)) {
