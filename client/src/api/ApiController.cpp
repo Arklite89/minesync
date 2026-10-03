@@ -8,11 +8,11 @@ cpr::Response ApiController::uploadSave(Client* client, cpr::File file) {
     return cpr::Post(
         cpr::Url{client->getServerUrl() + "/upload"},
         cpr::Multipart{
-        {"name", fs::path(file.filepath).filename()},
-        {"file", file}
-    });
+            cpr::Part{"name", fs::path(file.filepath).filename().string()},
+            cpr::Part{"file", file}
+        }
+    );
 }
-
 cpr::Response ApiController::getSave(Client* client, const World& world, const fs::path& output) {
     std::ofstream ofs(output, std::ios::binary);
     if (!ofs.is_open()) {
