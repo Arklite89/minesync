@@ -48,11 +48,8 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
         GIT_TAG        asio-1-30-2
 )
-FetchContent_GetProperties(asio)
-if(NOT asio_POPULATED)
-    FetchContent_Populate(asio)
-    set(ASIO_INCLUDE_DIR "${asio_SOURCE_DIR}/asio/include" CACHE PATH "Asio header directory" FORCE)
-endif()
+FetchContent_MakeAvailable(asio)
+set(ASIO_INCLUDE_DIR "${asio_SOURCE_DIR}/asio/include" CACHE PATH "Asio header directory" FORCE)
 
 # Crow Dependency
 FetchContent_Declare(
@@ -64,9 +61,7 @@ FetchContent_MakeAvailable(crow)
 
 # GUI Dependencies
 find_package(PkgConfig REQUIRED)
-if(NOT WIN32)
-    pkg_check_modules(CAIRO REQUIRED cairo)
-endif()
+pkg_check_modules(CAIRO REQUIRED cairo)
 set(FLTK_USE_STATIC_LIBS ON)
 find_package(FLTK REQUIRED)
 
@@ -200,12 +195,12 @@ include(CPack)
 
 if(WIN32)
     file(GLOB MINGW_CLIENT_DLLS
-        "/usr/x86_64-w64-mingw32/bin/libssp-0.dll"
-        "/usr/x86_64-w64-mingw32/bin/mgwfltk*.dll"
-        "/usr/x86_64-w64-mingw32/bin/libcairo*.dll"
-        "/usr/x86_64-w64-mingw32/bin/libpixman*.dll"
-        "/usr/x86_64-w64-mingw32/bin/libpng*.dll"
-        "/usr/x86_64-w64-mingw32/bin/zlib1.dll"
+            "/usr/x86_64-w64-mingw32/bin/libssp-0.dll"
+            "/usr/x86_64-w64-mingw32/bin/mgwfltk*.dll"
+            "/usr/x86_64-w64-mingw32/bin/libcairo*.dll"
+            "/usr/x86_64-w64-mingw32/bin/libpixman*.dll"
+            "/usr/x86_64-w64-mingw32/bin/libpng*.dll"
+            "/usr/x86_64-w64-mingw32/bin/zlib1.dll"
     )
     install(FILES ${MINGW_CLIENT_DLLS} DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT client)
 endif()
