@@ -64,7 +64,9 @@ FetchContent_MakeAvailable(crow)
 
 # GUI Dependencies
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(CAIRO REQUIRED cairo)
+if(NOT WIN32)
+    pkg_check_modules(CAIRO REQUIRED cairo)
+endif()
 set(FLTK_USE_STATIC_LIBS ON)
 find_package(FLTK REQUIRED)
 
