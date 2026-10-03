@@ -6,6 +6,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
+if(WIN32)
+    # Prevent libcurl from trying to link missing wkscli library in MinGW
+    set(HAVE_LIBWKSCLI OFF CACHE BOOL "" FORCE)
+    set(HAVE_WKSCLI_H OFF CACHE BOOL "" FORCE)
+    set(CURL_DISABLE_NTLM ON CACHE BOOL "" FORCE)
+    set(CURL_DISABLE_SMB ON CACHE BOOL "" FORCE)
+
+    # Force Windows non-blocking sockets
+    set(HAVE_IOCTLSOCKET 1 CACHE BOOL "" FORCE)
+    set(HAVE_IOCTLSOCKET_FIONBIO 1 CACHE BOOL "" FORCE)
+
+    set(BUILD_CURL_EXE OFF CACHE BOOL "" FORCE)
+    set(ENABLE_CURL_MANUAL OFF CACHE BOOL "" FORCE)
+    set(CURL_DISABLE_TESTS ON CACHE BOOL "" FORCE)
+endif()
+
 # Disable CPR internal install targets
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(CPR_INSTALL OFF CACHE BOOL "" FORCE)
@@ -18,6 +34,26 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cpr)
 
+if(TARGET libcurl_static)
+    get_target_property(CURL_LINK_LIBS libcurl_static INTERFACE_LINK_LIBRARIES)
+    if(CURL_LINK_LIBS)
+        list(REMOVE_ITEM CURL_LINK_LIBS "wkscli" "libwkscli")
+        set_target_properties(libcurl_static PROPERTIES INTERFACE_LINK_LIBRARIES "${CURL_LINK_LIBS}")
+    endif()
+endif()
+
+# Asio Dependency (Header-only library required by Crow)
+FetchContent_Declare(
+        asio
+        GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+        GIT_TAG        asio-1-30-2
+)
+FetchContent_GetProperties(asio)
+if(NOT asio_POPULATED)
+    FetchContent_Populate(asio)
+    set(ASIO_INCLUDE_DIR "${asio_SOURCE_DIR}/asio/include" CACHE PATH "Asio header directory" FORCE)
+endif()
+
 # Crow Dependency
 FetchContent_Declare(
         crow
@@ -29,6 +65,7 @@ FetchContent_MakeAvailable(crow)
 # GUI Dependencies
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CAIRO REQUIRED cairo)
+set(FLTK_USE_STATIC_LIBS ON)
 find_package(FLTK REQUIRED)
 
 # ==============================================================================
@@ -139,10 +176,34 @@ set(CPACK_STRIP_FILES TRUE)
 set(CPACK_GENERATOR "TGZ;TXZ")
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 
-# ONLY package these components; ignore third-party 'Unspecified' targets
 set(CPACK_COMPONENTS_ALL client server)
 
 set(CPACK_COMPONENT_CLIENT_DISPLAY_NAME "MineSync Client GUI")
 set(CPACK_COMPONENT_SERVER_DISPLAY_NAME "MineSync Server")
 
+# ==============================================================================
+#  Windows Specific System Links & Packaging Setup
+# ==============================================================================
+if(WIN32)
+    target_link_libraries(minesync_client PRIVATE ws2_32 mswsock crypt32 gdi32 comctl32 ole32 uuid)
+    target_link_libraries(minesync_server PRIVATE ws2_32 mswsock crypt32)
+
+    target_link_options(minesync_client PRIVATE -static)
+    target_link_options(minesync_server PRIVATE -static)
+
+    set(CPACK_GENERATOR "ZIP")
+endif()
+
 include(CPack)
+
+if(WIN32)
+    file(GLOB MINGW_CLIENT_DLLS
+        "/usr/x86_64-w64-mingw32/bin/libssp-0.dll"
+        "/usr/x86_64-w64-mingw32/bin/mgwfltk*.dll"
+        "/usr/x86_64-w64-mingw32/bin/libcairo*.dll"
+        "/usr/x86_64-w64-mingw32/bin/libpixman*.dll"
+        "/usr/x86_64-w64-mingw32/bin/libpng*.dll"
+        "/usr/x86_64-w64-mingw32/bin/zlib1.dll"
+    )
+    install(FILES ${MINGW_CLIENT_DLLS} DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT client)
+endif()
