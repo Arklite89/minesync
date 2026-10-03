@@ -26,7 +26,7 @@ fs::path CacheHandler::getUserCacheDir() {
     }
 
     const char* local_app_data = std::getenv("LOCALAPPDATA");
-    return local_app_data ? fs::path(local_app_data) : {};
+    return local_app_data ? fs::path(local_app_data) : fs::path();
 
 #elif defined(__APPLE__)
 
