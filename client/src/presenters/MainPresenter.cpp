@@ -1,7 +1,3 @@
-//
-// Created by danya on 9/30/26.
-//
-
 #include "MainPresenter.h"
 
 #include "api/ApiController.h"
