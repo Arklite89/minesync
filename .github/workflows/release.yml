@@ -18,7 +18,7 @@ jobs:
         platform:
           - name: Linux x86_64
             cpack_gen: TGZ
-            packages: libfltk1.3-dev libssl-dev libx11-dev
+            packages: libfltk1.3-dev libcairo2-dev pkg-config libssl-dev libx11-dev
             cmake_flags: ""
 
           - name: Windows x64
