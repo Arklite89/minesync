@@ -34,11 +34,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cpr)
 
+# Fix static cURL dependencies on Windows
 if(TARGET libcurl_static)
     get_target_property(CURL_LINK_LIBS libcurl_static INTERFACE_LINK_LIBRARIES)
     if(CURL_LINK_LIBS)
         list(REMOVE_ITEM CURL_LINK_LIBS "wkscli" "libwkscli")
         set_target_properties(libcurl_static PROPERTIES INTERFACE_LINK_LIBRARIES "${CURL_LINK_LIBS}")
+    endif()
+    if(WIN32)
+        target_link_libraries(libcurl_static INTERFACE unistring iconv)
     endif()
 endif()
 
@@ -182,7 +186,7 @@ set(CPACK_COMPONENT_SERVER_DISPLAY_NAME "MineSync Server")
 #  Windows Specific System Links & Packaging Setup
 # ==============================================================================
 if(WIN32)
-    target_link_libraries(minesync_client PRIVATE ws2_32 mswsock crypt32 gdi32 comctl32 ole32 uuid unistring)
+    target_link_libraries(minesync_client PRIVATE ws2_32 mswsock crypt32 gdi32 comctl32 ole32 uuid)
     target_link_libraries(minesync_server PRIVATE ws2_32 mswsock crypt32)
 
     target_link_options(minesync_client PRIVATE -static)
