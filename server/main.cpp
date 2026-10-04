@@ -1,6 +1,8 @@
 #include "crow.h"
 #include <parsers/argParser.hpp>
 
+static int SERVER_PORT = 18080;
+
 static const std::string SAVE_FILE_NAME = "uploaded_save.zip";
 static const std::string SAVE_FILE_EXTENSION = ".zip";
 
@@ -16,7 +18,6 @@ int main(int argc, char** argv) {
 	default:
 		break;
 	}
-	
 	crow::SimpleApp app;
 
     CROW_ROUTE(app, "/")
@@ -78,5 +79,9 @@ int main(int argc, char** argv) {
         return crow::response(200, responseJson);
     });
 
+<<<<<<< HEAD
     app.port(serverPort).multithreaded().run();
+=======
+    app.port(SERVER_PORT).multithreaded().run();
+>>>>>>> 98681e734983392e442a4026fa3e9ac94705ca0a
 }
