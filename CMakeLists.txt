@@ -82,8 +82,6 @@ add_library(minesync_common STATIC
         common/lib/pfd/portable-file-dialogs.h
         common/files/FileHelpers.cpp
         common/files/FileHelpers.h
-	common/parsers/argParser.hpp
-	common/parsers/argParser.cpp
 )
 
 target_compile_definitions(minesync_common PRIVATE
@@ -142,6 +140,8 @@ target_link_libraries(minesync_client PRIVATE
 # ==============================================================================
 add_executable(minesync_server
         server/main.cpp
+	server/parsers/ArgParser.hpp
+	server/parsers/ArgParser.cpp
 )
 
 target_include_directories(minesync_server PRIVATE

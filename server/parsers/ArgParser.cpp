@@ -1,6 +1,6 @@
-#include "argParser.hpp"
+#include "ArgParser.hpp"
 
-int argParser::parseArguments(int argc, char** argv, int& port)
+int ArgParser::parseArguments(int argc, char** argv, int& port)
 {
 	for (int i = 1; i < argc; i++)
 	{
@@ -17,7 +17,7 @@ int argParser::parseArguments(int argc, char** argv, int& port)
 			{
 				if (i + 1 >= argc)
 				{
-					throw std::invalid_argument("port requires a value.");
+					throw std::invalid_argument("Port requires a value.");
 				}
 				changePort(port, argv[++i]);
 			}
