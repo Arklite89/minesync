@@ -1,5 +1,5 @@
 #include "crow.h"
-#include <parsers/ArgParser.hpp>
+#include "lib/CLI11.hpp"
 
 static const int SERVER_PORT = 18080;
 
@@ -7,17 +7,14 @@ static const std::string SAVE_FILE_NAME = "uploaded_save.zip";
 static const std::string SAVE_FILE_EXTENSION = ".zip";
 
 int main(int argc, char** argv) {
-	int serverPort = SERVER_PORT;
-	int argRes = ArgParser::parseArguments(argc, argv, serverPort);
-	switch (argRes)
-	{
-	case 1:
-		return 1;
-	case 2:
-		return 0;
-	default:
-		break;
-	}
+	CLI::App cliApp{"Minesync"};
+    argv = cliApp.ensure_utf8(argv);
+
+    int serverPort = SERVER_PORT;
+    cliApp.add_option("-p,--port", serverPort, "Port for the server");
+
+    CLI11_PARSE(cliApp, argc, argv);
+
 	crow::SimpleApp app;
 
     CROW_ROUTE(app, "/")
