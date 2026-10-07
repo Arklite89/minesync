@@ -141,8 +141,6 @@ target_link_libraries(minesync_client PRIVATE
 # ==============================================================================
 add_executable(minesync_server
         server/main.cpp
-        common/parsers/ArgParser.hpp
-        common/parsers/ArgParser.cpp
 )
 
 target_include_directories(minesync_server PRIVATE
